@@ -1,0 +1,38 @@
+1) home directory is "/home/keyuz4", used command "echo $HOME"
+
+2) UID is 47222, used command "id"
+
+3) my group is "ugrad", used command "groups"
+    alternatively, the group is also displayed using the same "id" command
+    from the previous question
+
+4) it erases the current line
+
+5) after removing execute permission, we cannot create files in that directory,
+    nor can we cd into it, "ls" or "ls -l" it
+
+6) Hard link: after removing the original file, the contents of the file is not
+        removed because there is a hard link to it. The contents are only 
+        removed when all links to the file is removed.
+   Symbolic link: after original file is removed, the contents of the file is
+        removed and no longer accessible. This is because a symbolic link works
+        like a pointer, it only "points" to the location of the file. When the
+        original file is removed, the link is "broken".
+
+7) using command "mv" on a directory is allowed. However, to "cp" a directory
+    we must add the "-r" option to copy it recursively
+
+8) The list of mounted file systems is in "/proc/mounts"
+    To find out the total number of mounted file systems, we can "cat" the
+    contents of that file and use "wc" to count the number of lines, that is,
+        cat /proc/mounts | wc -l
+    Running the above command on odin.ics.uci.edu gives the output of "85"
+
+9) since the terminals are in /dev/pts , we can simply "ls" the directory and
+    "grep" the ones that belong to us, that is,
+        ls -l /dev/pts | grep keyuz4
+    In this particular session, I see that my terminal is at /dev/pts/5
+
+10) FFDC should be 11111111 11011100 in binary
+    MOVE instruction is 1100101
+    MUL  instruction is 1010001 01011101
