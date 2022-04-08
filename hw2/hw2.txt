@@ -1,0 +1,18 @@
+1)  cat x y > y
+        The literal meaning of this command will be: concatenate contents from
+        file x, then file y, and put them into file y.
+        However, it will only put the content of file x into file y, the content 
+        of file y will be overwritten. Because the ">" operator will truncate 
+        file y before the "cat" process starts, which means that "cat" will 
+        concatenate contents of x, then an empty file, and finally output them 
+        into file y.
+    cat x >> x
+        The command means to concatenate content of x and append it back to x 
+        itself.
+        This will be an infinite loop. While "cat" is reading from x, it is
+        appending whatever content it reads back to x itself. Which means that 
+        "cat" will never reach EOF of x and be an infinite loop.
+
+2) it adds the "x" permission to the given files. That is, the execute
+    permission for files; and query/cd permission for directories.
+    
