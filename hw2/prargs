@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for (( i=0 ; i<=$# ; i++)); do
+    printf '%d: "%s"\n' $i "${!i}"
+done

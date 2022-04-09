@@ -16,3 +16,13 @@
 2) it adds the "x" permission to the given files. That is, the execute
     permission for files; and query/cd permission for directories.
     
+
+4) First, we use users(1) to get list of currently logged in users, pipe 
+    it to sort(1) to sort it. 
+    Then use the output as the argument for groups(1) to get the groups that 
+    each user is in.
+    Then pipe the output to grep(1) to filter only the undergrads. 
+    Then pipe output to cut(1) to cut the list of groups and only leave 
+    usernames. 
+    Then use tr(1) to delete the newlines to make everything in one line. 
+    Finally, echo(1) the output to get a newline at the end.
