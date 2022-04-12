@@ -1,3 +1,11 @@
 #!/bin/bash
 
-(echo $1 | grep -q '^[a-zA-Z_][a-zA-Z0-9_]*$') && echo 'yes' || echo 'no'
+if [ $# -eq 0 ]; then
+    echo "ERROR: no argument given"
+    exit 1
+elif [ $# -ne 1 ]; then
+    echo "ERROR: invalid number of argument(s) given"
+    exit 1
+else
+    (echo "$1" | grep -q '^[a-zA-Z_][a-zA-Z0-9_]*$') && echo 'yes' || echo 'no'
+fi

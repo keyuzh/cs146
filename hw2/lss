@@ -1,3 +1,8 @@
 #!/bin/bash
 
-ls -lS
+if [ $# -ne 0 ]; then
+    echo "ERROR: invalid argument given"
+    exit 1
+else
+    ls -lS | tail -n +2
+fi

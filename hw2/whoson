@@ -1,3 +1,8 @@
 #!/bin/bash
 
-echo $(groups $(users) | grep ugrad | cut -d: -f1 | sort -u | tr -d '\n')
+if [ $# -ne 0 ]; then
+    echo "ERROR: invalid argument given"
+    exit 1
+else
+    echo $(groups $(users) | grep ugrad | cut -d: -f1 | sort -u | tr -d '\n')
+fi

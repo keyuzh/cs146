@@ -1,3 +1,9 @@
+Name: Keyu Zhang
+ID: 19898090
+NetID: keyuz4
+
+CS146 Assignment 2
+
 1)  cat x y > y
         The literal meaning of this command will be: concatenate contents from
         file x, then file y, and put them into file y.
@@ -32,11 +38,12 @@
     USAGE: lss
     List all the file in currect directory in decreasing size order.
 
-    How it works: It simply calls "ls -lS"
+    How it works: It simply calls "ls -lS", then pipe its output to tail(1)
+    with argument "-n +2" to get rid of first line of "total xxx"
     
 5)  whoson(1)
     USAGE: whoson
-    Display a sorted list of uniqeu undergrads logged in the current machine,
+    Display a sorted list of unique undergrads logged in the current machine,
     that is, students with multiple terminal instances are only displayed once.
 
     How it works:
