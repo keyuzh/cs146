@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo $(groups $(users|sort) | grep ugrad | cut -d: -f1 | tr -d '\n')
+echo $(groups $(users) | grep ugrad | cut -d: -f1 | sort -u | tr -d '\n')
