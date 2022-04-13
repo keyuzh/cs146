@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $# -ne 0 ]; then
+if [ $# -ne 0 ]; then  # script does not take arguments
     echo "ERROR: invalid argument given"
     exit 1
 else
-    echo $(groups $(users) | grep ugrad | cut -d: -f1 | sort -u | tr -d '\n')
+    echo $(groups `users` | grep ugrad | cut -d: -f1 | sort -u)
 fi

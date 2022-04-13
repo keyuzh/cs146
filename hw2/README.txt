@@ -1,24 +1,3 @@
-Name: Keyu Zhang
-ID: 19898090
-NetID: keyuz4
-
-CS146 Assignment 2
-
-1)  cat x y > y
-        The literal meaning of this command will be: concatenate contents from
-        file x, then file y, and put them into file y.
-        However, it will only put the content of file x into file y, the content 
-        of file y will be overwritten. Because the ">" operator will truncate 
-        file y before the "cat" process starts, which means that "cat" will 
-        concatenate contents of x, then an empty file, and finally output them 
-        into file y.
-    cat x >> x
-        The command means to concatenate content of x and append it back to x 
-        itself.
-        This will be an infinite loop. While "cat" is reading from x, it is
-        appending whatever content it reads back to x itself. Which means that 
-        "cat" will never reach EOF of x and be an infinite loop.
-
 2)  cx(1)
     USAGE: cx FILE...
     Adds the "x" permission to the given files. That is, the execute permission 
@@ -54,8 +33,7 @@ CS146 Assignment 2
     Then pipe output to cut(1) to cut the list of groups and only leave 
     usernames. 
     Then use sort(1) with option -u to sort the usernames and remove duplicates.
-    Then use tr(1) to delete the newlines to make everything in one line. 
-    Finally, echo(1) the output to get a newline at the end.
+    Finally, echo(1) the output so everything is on one line.
 
 6)  howmany(1)
     USAGE: howmany

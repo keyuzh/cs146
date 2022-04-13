@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if [ $# -ne 0 ]; then
+if [ $# -ne 0 ]; then  # script does not take arguments
     echo "ERROR: invalid argument given"
     exit 1
 else
+    # use tail to cut first line "total XXX"
     ls -lS | tail -n +2
 fi

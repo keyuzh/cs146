@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if [ $# -ne 0 ]; then
+if [ $# -ne 0 ]; then  # script does not take arguments
     echo "ERROR: invalid argument given"
     exit 1
 else
+    # ls -1 lists one file per line without headers
     ls -1 | wc -l
 fi

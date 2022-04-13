@@ -1,5 +1,6 @@
 #!/bin/bash
 
 for (( i=0 ; i<=$# ; i++)); do
+    # use indirection to get the actual argument
     printf '%d: "%s"\n' $i "${!i}"
 done
