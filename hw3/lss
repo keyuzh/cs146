@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# if [ $# -eq 0 ]; then  # no argument
+#     ls -l "$@" | (sed -u 1q; sort -rnk 5)
+#     exit 0
+# else
+    # use tail to cut first line "total XXX"
+    # ls -lS | tail -n +2
+
+FILENAMES=""
+ORG="$@"
+TEMP=$(getopt -o ':sig' -- "$@")
+
+# if [ $? -ne 0 ]; then
+#         echo 'Terminating...' >&2
+#         exit 1
+# fi
+
+# Note the quotes around "$TEMP": they are essential!
+# echo $TEMP
+# echo $ORG
+eval set -- "$TEMP"
+unset TEMP
+
+while true; do
+        case "$1" in
+                '-s'|'-i'|'-g')
+                        echo "ERROR"
+                        exit 1
+                        # shift
+                        # continue
+                ;;
+                '--')
+                        shift
+                        # continue
+                        break
+                ;;
+                # '-*')
+                #     echo "OTHER"
+                #     shift
+                #     continue
+                # ;;
+                # *)
+                #     # echo "$1"
+                #         echo 'Internal error!' >&2
+                #         exit 1
+                # ;;
+        esac
+done
+
+# echo 'Remaining arguments:'
+for arg; do
+    FILENAMES="-d"
+    break
+    # echo "--> '$arg'"
+done
+
+
+
+    # while getopts ":sig" flag
+    # do
+    #     case "${flag}" in
+    #         s|i|g) 
+    #             echo "ERROR"
+    #             exit 1
+    #             ;;
+    #         ?)
+    #             echo "OTHER";;
+    #         *)
+    #             echo "OTHER2";;
+    #     esac
+    # done
+    # # ls -ld "$@" | (sed -u 1q; sort -rhk 5)
+    # echo "ARGS@@"
+    # echo "$@"
+    # echo "FILENAMES"
+    # echo $FILENAMES
+    # echo "ORG"
+    # echo $ORG
+ls -l $FILENAMES $ORG | sort -rgk 5
+# fi
