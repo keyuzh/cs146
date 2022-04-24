@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# check if the $TRASH environment variable is set
+if [ -z ${TRASH+x} ]; then
+    echo "ERROR: TRASH environment variable not defined, exiting"
+    exit 1
+fi
+
+pwd_in_trash="${TRASH/#\~/$HOME}"$PWD
+for arg; do
+    # check if the file exists
+    if [ -e "$pwd_in_trash/$arg" ]; then
+        mv "$pwd_in_trash/$arg" $PWD
+    else
+        echo "ERROR: '$arg' does not exist"
+    fi
+done

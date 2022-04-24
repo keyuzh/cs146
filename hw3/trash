@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -ne 0 ]; then  # script does not take arguments
+    echo "ERROR: invalid argument given"
+    exit 1
+fi
+
+# check if the $TRASH environment variable is set
+if [ -z ${TRASH+x} ]; then
+    echo "ERROR: TRASH environment variable not defined, exiting"
+    exit 1
+fi
+
+# empty trash can
+cd ${TRASH/#\~/$HOME}  # expand ~
+rm -rf ./*

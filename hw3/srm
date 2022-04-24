@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# check if the $TRASH environment variable is set
+if [ -z ${TRASH+x} ]; then
+    echo "ERROR: TRASH environment variable not defined, exiting"
+    exit 1
+fi
+
+# check if theres any options, if so, use regular rm
+while getopts ":" flag
+do
+    case "${flag}" in
+        ?)
+            rm "$@"
+            exit 2
+            ;;
+    esac
+done
+
+# expand ~ to actual path
+dest="${TRASH/#\~/$HOME}"$PWD
+# create directory in trash if not exists
+mkdir -p $dest
+# move files to trash
+mv -t $dest "$@"
