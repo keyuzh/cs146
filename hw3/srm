@@ -22,4 +22,11 @@ dest="${TRASH/#\~/$HOME}"$PWD
 # create directory in trash if not exists
 mkdir -p $dest
 # move files to trash
-mv -t $dest "$@"
+for arg; do
+    # check if the file exists
+    if [ -e "$arg" ]; then
+        mv $arg $dest
+    else
+        echo "ERROR: '$arg' does not exist"
+    fi
+done
