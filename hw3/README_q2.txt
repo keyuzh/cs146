@@ -5,12 +5,13 @@ NOTE:
 srm(1)
     USAGE: srm [OPTION]... [FILE]...
 
-    Safely removes given files. 
+    Safely removes given files to the trashcan, if a file with same name and
+    path already exists, the old file will be replaced. 
     If any option is specified, command uses rm(1) with the given options and 
     recovery will not be possible.
 
 unrm(1)
-    USAGE: unrm [FILE]...
+    USAGE: unrm FILE...
     Recovers given files from the trashcan. If given file(s) does not exist, 
     outputs an error and skip the non-existing file(s).
 
