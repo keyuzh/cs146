@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# temp directory, use current pid to guarantee uniqueness
+tempdir="/tmp/C-interp-$$"
+# name this script is called by
+filename=${0##*/}
+
+mkdir $tempdir
+
+gcc "$filename.c" -o "$tempdir/$filename"
+
+"$tempdir/$filename" "$@"
+
+rm -rf $tempdir
+
+# echo $tempdir
+
+# echo "$@"
+# echo $$
