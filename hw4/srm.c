@@ -3,20 +3,42 @@
 #include <string.h>
 #include <getopt.h>
 #include <limits.h>
+#include <errno.h>
+
+void reportError(const char* msg)
+{
+    perror(msg);
+    exit(1);
+}
+
+void getLocalTrash(char* localTrash)
+{
+    getcwd(localTrash, _POSIX_PATH_MAX);
+    strcat(localTrash, "/.trash");
+}
+
 
 int main(int argc, char* argv[], char* envp[])
 {
     char* globalTrash = getenv("TRASH");
-    if (globalTrash != NULL)
+    if (globalTrash == NULL)
     {
-        printf("DEFINED: %s\n", globalTrash);
+        reportError("srm: TRASH environment variable not defined");
     }
+    // make local trash directory
     char localTrash[_POSIX_PATH_MAX];
-    getcwd(localTrash, sizeof(localTrash));
+    getLocalTrash(&localTrash);
+    if (mkdir(localTrash, -1) && errno != EEXIST)
+    {
+        // mkdir fails 
+        // and errno is not EEXIST (which is ignored)
+        reportError("srm: Failed to create local trash directory");
+    }
 
-    strcat(localTrash, "/.trash");
-    printf("TRASH: %s\n", localTrash);
-    mkdir(localTrash);
+    FILE* trashList = fopen(globalTrash, "a");
+    fputs(localTrash, trashList);
+    fputc('\n', trashList);
+    fclose(trashList);
 
     int i;
     char* fileToTrash;
@@ -28,7 +50,7 @@ int main(int argc, char* argv[], char* envp[])
         strcat(fileLocationInTrash, "/");
         strcat(fileLocationInTrash, fileToTrash);
         
-        printf("F: %s\n", fileLocationInTrash);
+        // printf("F: %s\n", fileLocationInTrash);
         rename(fileToTrash, fileLocationInTrash);
     }
 }
