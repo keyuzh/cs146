@@ -2,18 +2,20 @@
 
 # temp directory, use current pid to guarantee uniqueness
 tempdir="/tmp/C-interp-$$"
-# name this script is called by
+
+# set cleanup and trap signals
+cleanup () {
+    rm -rf $tempdir
+    exit 1
+}
+trap cleanup 0 1 2 3 15
+
+# name this script is called by, without './'
 filename=${0##*/}
 
+# create temp directory and compile
 mkdir $tempdir
-
 gcc "$filename.c" -o "$tempdir/$filename"
 
+# execute
 "$tempdir/$filename" "$@"
-
-rm -rf $tempdir
-
-# echo $tempdir
-
-# echo "$@"
-# echo $$
