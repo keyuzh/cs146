@@ -1,7 +1,7 @@
 NOTE: 
     before running srm/unrm/trash, define an environment variable called
     TRASH which is used as a global trash to keep track of the location of local
-    trash cans. e.g. "~/.trash"
+    trash cans. e.g. "~/.globaltrash"
     OPTIONAL: define an environment variable EVERY for the "every" program
 
 C-interp

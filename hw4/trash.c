@@ -33,4 +33,5 @@ int main(int argc, char* argv[], char* envp[])
     fclose(trashList);
     // truncate the content since we no longer need it
     truncate(globalTrash, 0);
+    free(globalTrash);
 }

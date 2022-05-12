@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <getopt.h>
+
 #include "every.h"
 
 void setOption(num* op, char* op_str)
@@ -13,6 +18,7 @@ void setOption(num* op, char* op_str)
 
 void printNextLine(FILE* f)
 {
+    // need to use calloc or valgrind complains
     char* line = calloc(100, sizeof(char));
     size_t n = 100 * sizeof(char);
     getline(&line, &n, f);
@@ -27,6 +33,33 @@ void skipLine(FILE* f)
     {
         c = fgetc(f);
     } while (c != '\n' && c != EOF);
+}
+
+void checkOption(num* op)
+{
+    // no need to check < 0 since they are unsigned
+    if ((op->n == 0) || (op->m > op->n))
+    {
+        fprintf(stderr, "every: illegal option. N,M must satisfy N > 0, M >= 0, and M <= N\n");
+        exit(1);
+    }
+}
+
+void process(FILE* f, num* op)
+{
+    int currentLine = 0;
+    while (feof(f) == 0)
+    {
+        if (currentLine % op->n < op->m)
+        {
+            printNextLine(f);
+        }
+        else
+        {
+            skipLine(f);
+        }
+        ++currentLine;
+    }
 }
 
 int main(int argc, char* argv[], char* envp[])
@@ -50,23 +83,25 @@ int main(int argc, char* argv[], char* envp[])
             setOption(&op, option);
         }
     }
+    // check m, n
+    checkOption(&op);
+    if (files_arg >= argc)
+    {
+        // no file given, use stdin
+        process(stdin, &op);
+        return 0;
+    }
     int i;
     for (i = files_arg; i < argc; i++)
     {
         FILE* f = fopen(argv[i], "r");
-        int currentLine = 0;
-        while (feof(f) == 0)
+        if (f == NULL)
         {
-            if (currentLine % op.n < op.m)
-            {
-                printNextLine(f);
-            }
-            else
-            {
-                skipLine(f);
-            }
-            ++currentLine;
+            perror("every: failed to open file");
+            continue;
         }
+        process(f, &op);
         fclose(f);
     }
+    return 0;
 }

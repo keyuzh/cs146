@@ -59,7 +59,10 @@ char* processLine(FILE* f)
     size_t lineLen;
     getline(&line, &lineLen, f);
     // remove \n at the end
-    line[strlen(line)-1] = 0;
+    if (strlen(line) > 0)
+    {
+        line[strlen(line)-1] = 0;
+    }
     return line;
 }
 
@@ -78,6 +81,7 @@ void moveFromTrash(char* fileToTrash, char* localTrash)
     {
         perror(fileToTrash);
     }
+    free(fileLocationInTrash);
 }
 
 void moveToTrash(char* fileToTrash, char* localTrash)
@@ -87,6 +91,7 @@ void moveToTrash(char* fileToTrash, char* localTrash)
     {
         perror(fileToTrash);
     }
+    free(fileLocationInTrash);
 }
 
 char* makeLocalTrash()

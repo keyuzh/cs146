@@ -17,4 +17,6 @@ int main(int argc, char* argv[], char* envp[])
     {
         moveFromTrash(argv[i], localTrash);
     }
+    free(globalTrash);
+    free(localTrash);
 }
