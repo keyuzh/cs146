@@ -38,31 +38,25 @@ int main(int argc, char* argv[], char* envp[])
     if (argc > 1 && argv[1][0] == '-')
     {
         // -N,M option given
-        printf("given\n");
         setOption(&op, argv[1]);
-        printf("N, M = %ld, %ld\n", op.n, op.m);
         files_arg = 2;
     }
     else
     {
-        printf("not given\n");
         // not given, search envp
         char* option = getenv("EVERY");
         if (option != NULL)
         {
             setOption(&op, option);
-            printf("FOUND envp, NM = %ld, %ld\n", op.n, op.m);
         }
     }
     int i;
-    printf("FIles:\n");
     for (i = files_arg; i < argc; i++)
     {
         FILE* f = fopen(argv[i], "r");
         int currentLine = 0;
         while (feof(f) == 0)
         {
-            // printf("C: %d, %d\n", currentLine, currentLine%op.n);
             if (currentLine % op.n < op.m)
             {
                 printNextLine(f);
