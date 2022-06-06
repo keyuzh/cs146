@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# parse -f option
+force=""
+if [ $1 = "-f" ]; then
+    force="-f"
+    shift
+fi
+
+# store sed command in a variable
+pattern="s"$1
+shift
+
+# we can use "$@" here because the shift in previous lines
+echo "$@" | gawk -v pattern=$pattern -v force=$force '
+BEGIN{ RS=" " }  # use space as line separator
+{
+    # use sed to get the substituted string
+    printf "dest=$(echo \"%s\" | sed \"%s\")\n", $1, pattern
+    # check if the destination already exists, if so, warn and skip renaming
+    printf "[ -e $dest ] && echo \"rename: $dest already exists\" 1>&2 || mv %s %s $dest \n", force, $1
+}' 2>/dev/null | bash 
+# awk gives warnings when we use something like "\.", so redirect err to null
