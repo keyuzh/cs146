@@ -1,0 +1,30 @@
+#!/bin/bash
+
+files="/home/wayne/pub/cs146/awkcel"
+
+# 1(a)
+# command: use code from 1(b) to generate table, output to file named "orthologs" 
+# then use the following commands to find most/least ortholog pair
+# least
+tail -n +2 orthologs | sort -k 3 -n | head -n 1
+# most
+tail -n +2 orthologs | sort -k 3 -nr | head -n 1
+# most orthologs: rat and mouse
+# least orthologs: yeast and alpaca
+
+# 1(b)
+# script that creates a table of the number of orthologs for every pair 
+species=(`echo $(head -n 1 "$files/orthologs.tsv") | tr "\t" " "`)
+num_species=${#species[@]}
+
+printf "first\tsecond\torthologs\n"
+for (( i=0; i<$num_species; i++));
+do
+    for (( j=$((i+1)); j<$num_species; j++));
+    do
+        first=${species[$i]}
+        second=${species[$j]}
+        printf "%s\t%s\t" $first $second
+        ./awkcel "$first!=\"_\" && $second!=\"_\" {count++} END{print count}" "$files/orthologs.tsv"
+    done
+done

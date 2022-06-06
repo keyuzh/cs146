@@ -7,8 +7,7 @@
 # $2: tsv file
 
 # beginning of awk code that need to be generated
-start='\
-BEGIN{ finish = 0 }
+start='BEGIN{ finish = 0 }
 /^#/ {next}
 finish == 0 {
     finish = 1   # skips the first non-comment line (header)
