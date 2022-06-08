@@ -87,7 +87,6 @@ files="/home/wayne/pub/cs146/awkcel"
         # day: 2011-06-16
         # change: -66.70%
     # finding out which company is at column 203
-    column=203
     cat "$files/historical.2011.tsv" | gawk -F"\t" -v column=203 "{print \$column; exit}"
     # output: CSX
 
