@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
-#include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include "parallel.h"
 
 char* getCommand()
 {
@@ -13,6 +12,7 @@ char* getCommand()
     if (getline(&command, &len, stdin) == -1) 
     {
         // EOF
+        free(command);
         return NULL;
     }
     return command;
@@ -26,10 +26,10 @@ void startCommand(char* shell, char* command, unsigned int* running)
         command,
         NULL
     };
-
     pid_t pid;
     if ((pid = fork()) < 0) 
     {
+        // error handling in case fork fails
         perror("fork error");
         exit(EXIT_FAILURE);
     }
@@ -37,27 +37,37 @@ void startCommand(char* shell, char* command, unsigned int* running)
     {
         int exec_result = execvp(args[0], args);
         if (exec_result < 0) {  
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);  // error handling
         }
     }
     else // parent
     {
+        // increment counter of running children
         ++(*running);
     }
 }
 
+int processCommand(bool* finished, char* shell, unsigned int* running)
+{
+    char* command = getCommand();
+    if (command == NULL)
+    {
+        *finished = true;  // less command than N
+        return -1;
+    }
+    startCommand(shell, command, running);
+    free(command);  // cleanup
+    return 0;
+}
+
+
 int main(int argc, char* argv[], char* envp[])
 {
     char* shell = getenv("SHELL");
-    unsigned int n = sysconf(_SC_NPROCESSORS_ONLN);
-
+    unsigned int n = sysconf(_SC_NPROCESSORS_ONLN);  // number of CPUs
     unsigned int running = 0;
     unsigned int exit_code = 0;  
     bool finished = false;
-
-
-    printf("shell: %s; n: %d\n", shell, n);
-
     // parse arguments
     if (argc > 1)
     {
@@ -77,22 +87,13 @@ int main(int argc, char* argv[], char* envp[])
             n = atoi(argv[nth_arg]);
         }
     }
-    
-    printf("shell: %s; n: %d\n", shell, n);
-
     // read command lines from stdin
-    // while (1)
-    for (size_t i = 0; i < n; i++)
+    size_t i;
+    for (i = 0; i < n; i++)
     {
-        char* command = getCommand();
-        if (command == NULL)
-        {
-            finished = true;
-            break;
-        }
-        startCommand(shell, command, &running);
+        if (processCommand(&finished, shell, &running)) {break;}
     }
-
+    // reap child then start new command (if needed)
     while (running)
     {
         // wait for child
@@ -101,23 +102,13 @@ int main(int argc, char* argv[], char* envp[])
         --running;
         if (exit_status != 0)
         {
-            printf("status: %d\n", WIFEXITED(exit_status));
+            // child exited error
             ++exit_code;
         }
-
         // start new command if there's more
-        if (!finished)
-        {
-            char* command = getCommand();
-            if (command == NULL)
-            {
-                finished = true;
-                continue;
-            }
-            startCommand(shell, command, &running);
-        }
+        if (!finished) {processCommand(&finished, shell, &running);}
     }
+    // max exit code is 255
     exit_code = exit_code > 255 ? 255 : exit_code;
-    printf("CODE: %d\n", exit_code);
     exit(exit_code);
 }

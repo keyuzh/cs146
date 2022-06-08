@@ -26,8 +26,9 @@ BEGIN{ print start }                    # prints the beginning
     printf "}" 
     exit                                # only need to process header here
 }
-END{ print script }                     # append user input
 ')
+
+generated+="$1" # append user input
 
 # execute generated awk script
 cat $2 | gawk "$generated"
