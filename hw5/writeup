@@ -7,7 +7,7 @@ files="/home/wayne/pub/cs146/awkcel"
     # least
     tail -n +2 orthologs_count.tsv | sort -k 3 -n | head -n 1
     # most
-     tail -n +2 orthologs_count.tsv | sort -k 3 -nr | head -n 1
+    tail -n +2 orthologs_count.tsv | sort -k 3 -nr | head -n 1
 
     # answer:
     # most orthologs: rat and mouse
